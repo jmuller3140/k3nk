@@ -86,15 +86,19 @@ export default async function Home() {
                   <p className="text-sm text-gray-500">
                     {user.currentStatus 
                       ? '🟢 Online now' 
-                      : `⚫ Last online: ${user.lastOnline instanceof Date && !isNaN(user.lastOnline.getTime())
-                          ? new Intl.DateTimeFormat('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              hour: 'numeric',
-                              minute: '2-digit',
-                              hour12: true
-                            }).format(user.lastOnline)
-                          : 'Never'}`
+                      : `⚫ Last online: ${
+                          user.lastOnline 
+                            ? new Intl.DateTimeFormat('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                second: '2-digit',
+                                timeZoneName: 'short'
+                              }).format(new Date(user.lastOnline))
+                            : 'Never'
+                        }`
                     }
                   </p>
                 </div>

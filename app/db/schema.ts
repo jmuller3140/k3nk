@@ -6,15 +6,21 @@ export const users = pgTable('users', {
   email: varchar('email', { length: 255 }).notNull().unique(),
   isOnline: boolean('is_online').default(false),
   lastOnline: timestamp('last_online', { 
-    mode: 'date',
-    precision: 6
+    precision: 6,
+    mode: 'string'
   }).notNull().defaultNow(),
-  createdAt: timestamp('created_at', { precision: 6 }).defaultNow().notNull()
+  createdAt: timestamp('created_at', { 
+    precision: 6,
+    mode: 'string'
+  }).defaultNow().notNull()
 });
 
 export const statusLogs = pgTable('status_logs', {
   id: serial('id').primaryKey(),
   userId: integer('user_id').references(() => users.id).notNull(),
   status: boolean('status').notNull(),
-  createdAt: timestamp('created_at', { precision: 6 }).defaultNow().notNull()
+  createdAt: timestamp('created_at', { 
+    precision: 6,
+    mode: 'string'
+  }).defaultNow().notNull()
 }); 
