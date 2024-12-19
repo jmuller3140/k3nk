@@ -17,7 +17,6 @@ RUN npm install --ignore-scripts
 COPY . .
 
 # Generate drizzle migrations with a dummy DATABASE_URL
-ENV DATABASE_URL="postgresql://postgres:vbmSawuWmhiWUuQbDnOWHKLDWYcxmPUy@autorack.proxy.rlwy.net:46322/railway"
 RUN npm run db:generate
 
 # Build the application
