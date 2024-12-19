@@ -4,13 +4,13 @@ export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
-  lastOnline: timestamp('last_online'),
+  lastOnline: timestamp('last_online', { mode: 'date' }).notNull().defaultNow(),
   createdAt: timestamp('created_at').defaultNow().notNull()
 });
 
 export const statusLogs = pgTable('status_logs', {
   id: serial('id').primaryKey(),
   userId: integer('user_id').references(() => users.id).notNull(),
-  status: boolean('status').notNull(), // true for online, false for offline
+  status: boolean('status').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull()
 }); 
