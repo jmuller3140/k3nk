@@ -9,6 +9,7 @@ export async function POST(request: Request) {
     await db.insert(statusLogs).values({
       userId,
       status,
+      createdAt: new Date(),
     });
 
     return NextResponse.json({ success: true });
