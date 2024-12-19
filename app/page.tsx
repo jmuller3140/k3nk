@@ -83,11 +83,11 @@ export default async function Home() {
                   <p className="text-sm text-gray-500">
                     {user.currentStatus 
                       ? '🟢 Online now' 
-                      : `⚫ Last online: ${user.lastOnline 
+                      : `⚫ Last online: ${user.lastOnline instanceof Date && !isNaN(user.lastOnline.getTime())
                           ? new Intl.DateTimeFormat('default', {
                               dateStyle: 'medium',
                               timeStyle: 'short'
-                            }).format(new Date(user.lastOnline))
+                            }).format(user.lastOnline)
                           : 'Never'}`
                     }
                   </p>
