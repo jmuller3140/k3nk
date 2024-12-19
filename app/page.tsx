@@ -2,15 +2,11 @@ import { db } from './db';
 import { users, statusLogs } from './db/schema';
 import { desc, eq } from 'drizzle-orm';
 import StatusToggle from './components/statusToggle';
+import type { InferModel } from 'drizzle-orm';
 
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  createdAt: Date;
-  isOnline: boolean | null;
-  lastOnline: Date;
-};
+type StatusLog = InferModel<typeof statusLogs>;
+type DbUser = InferModel<typeof users>;
+type User = DbUser & { latestStatus?: StatusLog };
 
 type UserWithStatus = Omit<User, 'currentStatus'> & {
   currentStatus: boolean;
@@ -23,7 +19,7 @@ async function getLatestStatusForUsers(): Promise<UserWithStatus[]> {
     console.log('Found users:', allUsers.length);
     
     const usersWithStatus = await Promise.all(
-      allUsers.map(async (user: User) => {
+      allUsers.map(async (user: DbUser) => {
         const latestStatus = await db
           .select()
           .from(statusLogs)
@@ -34,7 +30,8 @@ async function getLatestStatusForUsers(): Promise<UserWithStatus[]> {
         return {
           ...user,
           currentStatus: user.isOnline ?? false,
-          lastOnline: user.lastOnline
+          lastOnline: user.lastOnline,
+          latestStatus: latestStatus[0],
         } satisfies UserWithStatus & { currentStatus: boolean };
       })
     );
