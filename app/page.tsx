@@ -35,7 +35,7 @@ async function getLatestStatusForUsers() {
 }
 
 export default async function Home() {
-  let usersWithStatus: any[] = [];
+  let usersWithStatus: unknown[] = [];
   let error = null;
 
   try {
