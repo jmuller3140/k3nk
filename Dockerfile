@@ -43,8 +43,9 @@ COPY --from=builder /app/drizzle ./drizzle
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/drizzle.config.ts ./
 
-# Install production dependencies including tsx
-RUN npm install --production --ignore-scripts && npm install tsx
+# Install production dependencies including tsx (skip postinstall script)
+RUN npm install --production --ignore-scripts && \
+    npm install tsx --ignore-scripts
 
 # Set environment variables
 ENV NODE_ENV=production
@@ -53,4 +54,4 @@ ENV PORT=3000
 EXPOSE 3000
 
 # Run migrations and start the application
-CMD ["sh", "-c", "if [ -n \"$DATABASE_URL\" ]; then npm run db:migrate && node server.js; else echo 'ERROR: DATABASE_URL is not defined' && exit 1; fi"]
+CMD ["sh", "-c", "npx tsx app/db/migrate.ts && node server.js"]
