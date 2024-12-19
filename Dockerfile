@@ -54,4 +54,4 @@ ENV PORT=3000
 EXPOSE 3000
 
 # Run migrations and start the application
-CMD ["sh", "-c", "npx tsx app/db/migrate.ts && node server.js"]
+CMD ["sh", "-c", "echo 'Running migrations...' && npx tsx app/db/migrate.ts && echo 'Migrations complete, starting server...' && node server.js"]
