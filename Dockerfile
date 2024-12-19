@@ -44,7 +44,7 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/drizzle.config.ts ./
 
 # Install production dependencies including tsx
-RUN npm install --production && npm install tsx
+RUN npm install --production --ignore-scripts && npm install tsx
 
 # Set environment variables
 ENV NODE_ENV=production
