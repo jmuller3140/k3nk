@@ -8,6 +8,8 @@ type User = {
   name: string;
   email: string;
   createdAt: Date;
+  isOnline: boolean;
+  lastOnline: Date | null;
 };
 
 type UserWithStatus = User & {
@@ -30,14 +32,10 @@ async function getLatestStatusForUsers(): Promise<UserWithStatus[]> {
           .orderBy(desc(statusLogs.createdAt))
           .limit(1);
 
-        console.log(`User ${user.id} latest status:`, latestStatus[0]);
-
-        const isOnline = latestStatus.length > 0 ? latestStatus[0].status : false;
-        
         return {
           ...user,
-          currentStatus: isOnline,
-          lastOnline: latestStatus[0]?.createdAt ?? null
+          currentStatus: user.isOnline,
+          lastOnline: user.lastOnline
         };
       })
     );
