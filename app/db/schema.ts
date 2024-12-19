@@ -4,6 +4,7 @@ export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
+  isOnline: boolean('is_online').default(false),
   lastOnline: timestamp('last_online', { mode: 'date' }).notNull().defaultNow(),
   createdAt: timestamp('created_at').defaultNow().notNull()
 });

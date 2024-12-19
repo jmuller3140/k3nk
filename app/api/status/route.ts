@@ -17,9 +17,12 @@ export async function POST(request: Request) {
         createdAt: now,
       });
 
-      // Update user's last online time for both online and offline status changes
+      // Update user's current status and last online time
       await tx.update(users)
-        .set({ lastOnline: now })
+        .set({ 
+          isOnline: status,
+          lastOnline: now 
+        })
         .where(eq(users.id, userId));
     });
 
