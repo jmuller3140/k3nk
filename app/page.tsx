@@ -95,6 +95,7 @@ export default async function Home() {
                                 hour: 'numeric',
                                 minute: '2-digit',
                                 second: '2-digit',
+                                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                                 timeZoneName: 'short'
                               }).format(new Date(user.lastOnline))
                             : 'Never'
