@@ -3,7 +3,19 @@ import { users, statusLogs } from './db/schema';
 import { desc, eq } from 'drizzle-orm';
 import StatusToggle from './components/statusToggle';
 
-async function getLatestStatusForUsers() {
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  createdAt: Date;
+};
+
+type UserWithStatus = User & {
+  currentStatus: boolean;
+  lastOnline: Date | null;
+};
+
+async function getLatestStatusForUsers(): Promise<UserWithStatus[]> {
   try {
     console.log('Fetching users...');
     const allUsers = await db.select().from(users);
@@ -11,7 +23,7 @@ async function getLatestStatusForUsers() {
     
     // Get latest status for each user
     const usersWithStatus = await Promise.all(
-      allUsers.map(async (user) => {
+      allUsers.map(async (user: User) => {
         const latestStatus = await db
           .select()
           .from(statusLogs)
@@ -35,7 +47,7 @@ async function getLatestStatusForUsers() {
 }
 
 export default async function Home() {
-  let usersWithStatus: unknown[] = [];
+  let usersWithStatus: UserWithStatus[] = [];
   let error = null;
 
   try {
@@ -65,7 +77,7 @@ export default async function Home() {
           <p className="text-gray-500">No users found. Add some users to get started.</p>
         ) : (
           <div className="divide-y">
-            {usersWithStatus.map((user) => (
+            {usersWithStatus.map((user: UserWithStatus) => (
               <div key={user.id} className="py-4 flex items-center justify-between">
                 <div className="space-y-1">
                   <h3 className="font-medium">{user.name}</h3>
