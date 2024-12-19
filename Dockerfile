@@ -8,10 +8,15 @@ RUN apt-get update -y && \
 
 # Copy package files
 COPY package*.json ./
-RUN npm install
+
+# Install dependencies (skip postinstall script during build)
+RUN npm install --ignore-scripts
 
 # Copy application code
 COPY . .
+
+# Generate drizzle migrations
+RUN npm run db:generate
 
 # Build the application
 RUN npm run build
@@ -29,11 +34,20 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 
+# Copy migration files and scripts
+COPY --from=builder /app/app/db/migrate.ts ./app/db/
+COPY --from=builder /app/app/db/schema.ts ./app/db/
+COPY --from=builder /app/drizzle ./drizzle
+COPY --from=builder /app/package*.json ./
+
+# Install production dependencies including tsx
+RUN npm install --production && npm install tsx
+
 # Set environment variables
 ENV NODE_ENV=production
 ENV PORT=3000
 
 EXPOSE 3000
 
-# Start the application
-CMD ["node", "server.js"] 
+# Run migrations and start the application
+CMD ["sh", "-c", "npm run db:migrate && node server.js"]
