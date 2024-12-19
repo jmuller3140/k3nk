@@ -46,6 +46,8 @@ async function getLatestStatusForUsers(): Promise<UserWithStatus[]> {
   }
 }
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   let usersWithStatus: UserWithStatus[] = [];
   let error = null;
