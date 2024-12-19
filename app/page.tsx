@@ -15,7 +15,10 @@ type UserWithStatus = Omit<User, 'currentStatus'> & {
 async function getLatestStatusForUsers(): Promise<UserWithStatus[]> {
   try {
     console.log('Fetching users...');
-    const allUsers = await db.select().from(users);
+    const allUsers = await db
+      .select()
+      .from(users)
+      .orderBy(users.name);
     console.log('Found users:', allUsers.length);
     
     const usersWithStatus = await Promise.all(
@@ -84,9 +87,12 @@ export default async function Home() {
                     {user.currentStatus 
                       ? '🟢 Online now' 
                       : `⚫ Last online: ${user.lastOnline instanceof Date && !isNaN(user.lastOnline.getTime())
-                          ? new Intl.DateTimeFormat('default', {
-                              dateStyle: 'medium',
-                              timeStyle: 'short'
+                          ? new Intl.DateTimeFormat('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              hour: 'numeric',
+                              minute: '2-digit',
+                              hour12: true
                             }).format(user.lastOnline)
                           : 'Never'}`
                     }
