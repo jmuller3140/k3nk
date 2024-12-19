@@ -8,13 +8,12 @@ type User = {
   name: string;
   email: string;
   createdAt: Date;
-  isOnline: boolean;
-  lastOnline: Date | null;
+  isOnline: boolean | null;
+  lastOnline: Date;
 };
 
-type UserWithStatus = User & {
+type UserWithStatus = Omit<User, 'currentStatus'> & {
   currentStatus: boolean;
-  lastOnline: Date | null;
 };
 
 async function getLatestStatusForUsers(): Promise<UserWithStatus[]> {
@@ -34,9 +33,9 @@ async function getLatestStatusForUsers(): Promise<UserWithStatus[]> {
 
         return {
           ...user,
-          currentStatus: user.isOnline,
+          currentStatus: user.isOnline ?? false,
           lastOnline: user.lastOnline
-        };
+        } satisfies UserWithStatus & { currentStatus: boolean };
       })
     );
 
