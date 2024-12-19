@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate:pg",
+    "db:migrate": "tsx app/db/migrate.ts",
+    "postinstall": "npm run db:migrate"
   },
   "dependencies": {
     "@types/pg": "^8.11.10",
