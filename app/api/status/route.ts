@@ -1,15 +1,26 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../db';
-import { statusLogs } from '../../db/schema';
+import { statusLogs, users } from '../../db/schema';
+import { eq } from 'drizzle-orm';
 
 export async function POST(request: Request) {
   try {
     const { userId, status } = await request.json();
+    const now = new Date();
     
-    await db.insert(statusLogs).values({
-      userId,
-      status,
-      createdAt: new Date(),
+    // Begin transaction
+    await db.transaction(async (tx) => {
+      // Insert status log
+      await tx.insert(statusLogs).values({
+        userId,
+        status,
+        createdAt: now,
+      });
+
+      // Update user's last online time for both online and offline status changes
+      await tx.update(users)
+        .set({ lastOnline: now })
+        .where(eq(users.id, userId));
     });
 
     return NextResponse.json({ success: true });
