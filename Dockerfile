@@ -8,6 +8,7 @@ RUN apt-get update -y && \
 
 # Copy package files
 COPY package*.json ./
+COPY drizzle.config.ts ./
 
 # Install dependencies (skip postinstall script during build)
 RUN npm install --ignore-scripts
@@ -15,7 +16,8 @@ RUN npm install --ignore-scripts
 # Copy application code
 COPY . .
 
-# Generate drizzle migrations
+# Generate drizzle migrations with a dummy DATABASE_URL
+ENV DATABASE_URL="postgresql://postgres:password@localhost:5432/dummy"
 RUN npm run db:generate
 
 # Build the application
@@ -39,6 +41,7 @@ COPY --from=builder /app/app/db/migrate.ts ./app/db/
 COPY --from=builder /app/app/db/schema.ts ./app/db/
 COPY --from=builder /app/drizzle ./drizzle
 COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/drizzle.config.ts ./
 
 # Install production dependencies including tsx
 RUN npm install --production && npm install tsx

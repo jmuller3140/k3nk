@@ -8,13 +8,14 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "db:generate": "drizzle-kit generate:pg",
+    "db:generate": "drizzle-kit generate:pg --config=drizzle.config.ts",
     "db:migrate": "tsx app/db/migrate.ts",
     "postinstall": "npm run db:migrate"
   },
   "dependencies": {
     "@types/pg": "^8.11.10",
-    "drizzle-kit": "^0.20.18",
+    "@vercel/postgres-kysely": "^0.10.0",
+    "drizzle-kit": "^0.19.13",
     "drizzle-orm": "^0.38.2",
     "next": "15.1.1",
     "pg": "^8.13.1",
