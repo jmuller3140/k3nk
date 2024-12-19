@@ -53,4 +53,4 @@ ENV PORT=3000
 EXPOSE 3000
 
 # Run migrations and start the application
-CMD ["sh", "-c", "npm run db:migrate && node server.js"]
+CMD ["sh", "-c", "if [ -n \"$DATABASE_URL\" ]; then npm run db:migrate && node server.js; else echo 'ERROR: DATABASE_URL is not defined' && exit 1; fi"]
