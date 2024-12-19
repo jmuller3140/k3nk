@@ -27,9 +27,9 @@ RUN npm run build
 FROM node:20-slim AS runner
 WORKDIR /app
 
-# Install PostgreSQL client libraries in production
+# Install PostgreSQL client libraries and Python in production
 RUN apt-get update -y && \
-    apt-get install -y openssl libssl-dev libpq-dev
+    apt-get install -y openssl libssl-dev libpq-dev python3 python-is-python3 make g++
 
 # Copy built application
 COPY --from=builder /app/.next/standalone ./
