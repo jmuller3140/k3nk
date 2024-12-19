@@ -73,7 +73,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen p-8">
       <main className="max-w-2xl mx-auto space-y-8">
-        <h1 className="text-2xl font-bold">Team Status Board</h1>
+        <h1 className="text-2xl font-bold">Remote Station Status Board</h1>
         
         {usersWithStatus.length === 0 ? (
           <p className="text-gray-500">No users found. Add some users to get started.</p>
