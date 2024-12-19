@@ -21,7 +21,6 @@ async function getLatestStatusForUsers(): Promise<UserWithStatus[]> {
     const allUsers = await db.select().from(users);
     console.log('Found users:', allUsers.length);
     
-    // Get latest status for each user
     const usersWithStatus = await Promise.all(
       allUsers.map(async (user: User) => {
         const latestStatus = await db
@@ -31,10 +30,14 @@ async function getLatestStatusForUsers(): Promise<UserWithStatus[]> {
           .orderBy(desc(statusLogs.createdAt))
           .limit(1);
 
+        console.log(`User ${user.id} latest status:`, latestStatus[0]);
+
+        const isOnline = latestStatus.length > 0 ? latestStatus[0].status : false;
+        
         return {
           ...user,
-          currentStatus: latestStatus[0]?.status ?? false,
-          lastOnline: latestStatus[0]?.createdAt
+          currentStatus: isOnline,
+          lastOnline: latestStatus[0]?.createdAt ?? null
         };
       })
     );
