@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 export async function POST(request: Request) {
   try {
     const { userId, status } = await request.json();
-    const now = new Date();
+    const now = new Date().toISOString();
     
     // Begin transaction
     await db.transaction(async (tx) => {

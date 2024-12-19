@@ -7,11 +7,13 @@ export const users = pgTable('users', {
   isOnline: boolean('is_online').default(false),
   lastOnline: timestamp('last_online', { 
     precision: 6,
-    mode: 'string'
+    mode: 'string',
+    withTimezone: true
   }).notNull().defaultNow(),
   createdAt: timestamp('created_at', { 
     precision: 6,
-    mode: 'string'
+    mode: 'string',
+    withTimezone: true
   }).defaultNow().notNull()
 });
 
@@ -21,6 +23,7 @@ export const statusLogs = pgTable('status_logs', {
   status: boolean('status').notNull(),
   createdAt: timestamp('created_at', { 
     precision: 6,
-    mode: 'string'
+    mode: 'string',
+    withTimezone: true
   }).defaultNow().notNull()
 }); 
