@@ -85,14 +85,18 @@ export default async function Home() {
                     {user.currentStatus 
                       ? '🟢 Online now' 
                       : `⚫ Last online: ${user.lastOnline 
-                          ? new Date(user.lastOnline).toLocaleString()
+                          ? new Intl.DateTimeFormat('default', {
+                              dateStyle: 'medium',
+                              timeStyle: 'short'
+                            }).format(new Date(user.lastOnline))
                           : 'Never'}`
                     }
                   </p>
                 </div>
                 <StatusToggle 
                   userId={user.id} 
-                  initialStatus={user.currentStatus} 
+                  initialStatus={user.currentStatus}
+                  key={`toggle-${user.id}-${user.currentStatus}`}
                 />
               </div>
             ))}
